@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smileworks Dental Care | Modern Dentistry, Gentle Care</title>
+<meta name="description" content="Smileworks Dental Care — painless, modern dental treatments. Book your appointment online today.">
+
+<!-- ============================================================
+     FONTS
+     Fraunces  -> warm editorial serif, used ONLY for headlines
+     Inter     -> body copy / UI text
+     IBM Plex Mono -> small labels, stats, phone numbers (gives a
+                      "clinical precision" feel without being cold)
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   1. DESIGN TOKENS
+   Everything in this site is derived from this palette + type scale.
+   Change values here to re-theme the whole site for a different client.
+   ===================================================================== */
+:root{
+  /* -- colour palette --------------------------------------------- */
+  --ink:        #16302B;   /* primary text, deep teal-black          */
+  --teal:       #0E4D44;   /* brand primary (buttons, header)        */
+  --teal-dark:  #093733;   /* hover / pressed state of teal           */
+  --mint:       #EAF3EF;   /* soft section background tint            */
+  --ivory:      #FBF8F3;   /* page background                         */
+  --coral:      #FF6B4A;   /* accent / call-to-action                 */
+  --coral-dark: #E8552F;   /* hover state of coral                    */
+  --gold:       #E8A33D;   /* star ratings / highlights                */
+  --line:       #DDE7E2;   /* hairline borders                        */
+  --white:      #FFFFFF;
+
+  /* -- type --------------------------------------------------------- */
+  --font-display: "Fraunces", serif;
+  --font-body:    "Inter", sans-serif;
+  --font-mono:    "IBM Plex Mono", monospace;
+
+  /* -- layout --------------------------------------------------------- */
+  --max-w: 1180px;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 32px;
+  --shadow-card: 0 8px 30px -10px rgba(14, 77, 68, 0.18);
+  --shadow-pop:  0 16px 50px -12px rgba(14, 77, 68, 0.28);
+}
+
+/* =====================================================================
+   2. RESET / BASE
+   ===================================================================== */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--ivory);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+ul{ margin:0; padding:0; list-style:none; }
+h1,h2,h3,h4{ font-family:var(--font-display); margin:0; line-height:1.12; font-weight:600; }
+p{ margin:0; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+input,textarea,select{ font-family:inherit; font-size:1rem; }
+
+/* Respect users who've asked for reduced motion */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+}
+
+/* visible keyboard focus state everywhere (accessibility) */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+  outline:3px solid var(--coral);
+  outline-offset:2px;
+}
+
+.container{
+  width:100%;
+  max-width:var(--max-w);
+  margin:0 auto;
+  padding:0 24px;
+}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:0.78rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--coral);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:14px;
+}
+.eyebrow::before{
+  content:"";
+  width:18px; height:2px;
+  background:var(--coral);
+  display:inline-block;
+}
+.section-head{ max-width:640px; margin-bottom:48px; }
+.section-head h2{ font-size:clamp(1.7rem, 3.4vw, 2.6rem); margin-bottom:14px; }
+.section-head p{ color:#41584F; font-size:1.05rem; }
+.section{ padding:96px 0; position:relative; }
+.section--tint{ background:var(--mint); }
+
+/* generic buttons -------------------------------------------------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:14px 28px;
+  border-radius:999px;
+  font-weight:600;
+  font-size:0.95rem;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+  white-space:nowrap;
+}
+.btn-primary{ background:var(--coral); color:var(--white); box-shadow:var(--shadow-card); }
+.btn-primary:hover{ background:var(--coral-dark); transform:translateY(-2px); }
+.btn-outline{ background:transparent; color:var(--teal); border:1.5px solid var(--teal); }
+.btn-outline:hover{ background:var(--teal); color:var(--white); }
+.btn-ghost-light{ background:rgba(255,255,255,0.12); color:var(--white); border:1.5px solid rgba(255,255,255,0.4); }
+.btn-ghost-light:hover{ background:rgba(255,255,255,0.22); }
+.btn-block{ width:100%; }
+
+/* reveal-on-scroll utility (toggled by JS / IntersectionObserver) */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+/* =====================================================================
+   3. HEADER / NAVIGATION
+   ===================================================================== */
+.site-header{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(251,248,243,0.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid transparent;
+  transition:background .3s ease, border-color .3s ease, padding .3s ease;
+  padding:18px 0;
+}
+.site-header.is-scrolled{
+  background:rgba(251,248,243,0.96);
+  border-bottom-color:var(--line);
+  padding:10px 0;
+  box-shadow:0 4px 24px -10px rgba(14,77,68,0.12);
+}
+.nav-row{ display:flex; align-items:center; justify-content:space-between; gap:24px; }
+.logo{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:1.25rem; color:var(--teal); }
+.logo svg{ width:34px; height:34px; }
+.nav-links{ display:flex; align-items:center; gap:32px; }
+.nav-links a{ font-size:0.95rem; font-weight:500; color:var(--ink); position:relative; padding:6px 0; }
+.nav-links a::after{
+  content:""; position:absolute; left:0; bottom:0; height:2px; width:0;
+  background:var(--coral); transition:width .25s ease;
+}
+.nav-links a:hover::after, .nav-links a.is-active::after{ width:100%; }
+.nav-cta{ display:flex; align-items:center; gap:14px; }
+.nav-phone{ font-family:var(--font-mono); font-size:0.9rem; color:var(--teal); display:flex; align-items:center; gap:6px; }
+.nav-burger{ display:none; width:42px; height:42px; border-radius:50%; align-items:center; justify-content:center; background:var(--mint); }
+.nav-burger span, .nav-burger span::before, .nav-burger span::after{
+  content:""; display:block; width:18px; height:2px; background:var(--teal); position:relative; transition:.25s;
+}
+.nav-burger span::before{ position:absolute; top:-6px; }
+.nav-burger span::after{ position:absolute; top:6px; }
+
+@media (max-width: 880px){
+  .nav-links, .nav-phone{ display:none; }
+  .nav-burger{ display:flex; }
+  .nav-cta .btn-primary{ padding:10px 18px; font-size:0.85rem; }
+
+  /* slide-down mobile menu */
+  .mobile-menu{
+    position:fixed; top:0; right:0; height:100vh; width:78%; max-width:320px;
+    background:var(--teal); color:var(--white); z-index:200;
+    padding:100px 32px 32px; transform:translateX(100%);
+    transition:transform .35s ease; display:flex; flex-direction:column; gap:28px;
+  }
+  .mobile-menu.is-open{ transform:translateX(0); }
+  .mobile-menu a{ color:var(--white); font-size:1.1rem; font-weight:500; }
+  .mobile-menu .nav-phone{ display:flex; color:var(--white); }
+  .menu-backdrop{
+    position:fixed; inset:0; background:rgba(9,55,51,0.45); z-index:150;
+    opacity:0; visibility:hidden; transition:opacity .3s ease;
+  }
+  .menu-backdrop.is-open{ opacity:1; visibility:visible; }
+}
+@media (min-width:881px){ .mobile-menu, .menu-backdrop{ display:none; } }
+
+/* =====================================================================
+   4. HERO
+   Signature visual: a "smile-arc" rating gauge (SVG) instead of a
+   generic stock photo — it literally encodes a real number (98%)
+   in a shape drawn from the brand's own subject (a smile curve).
+   ===================================================================== */
+.hero{
+  position:relative;
+  padding:168px 0 90px;
+  background:
+    radial-gradient(circle at 85% 18%, rgba(255,107,74,0.10), transparent 45%),
+    radial-gradient(circle at 8% 85%, rgba(14,77,68,0.08), transparent 45%),
+    var(--ivory);
+  overflow:hidden;
+}
+.hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
+.hero h1{ font-size:clamp(2.4rem, 4.6vw, 3.6rem); color:var(--teal); margin-bottom:20px; }
+.hero h1 em{ font-style:normal; color:var(--coral); }
+.hero p.lede{ font-size:1.12rem; color:#41584F; max-width:480px; margin-bottom:32px; }
+.hero-actions{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:40px; }
+.hero-trust{ display:flex; gap:28px; flex-wrap:wrap; }
+.hero-trust .stat{ }
+.hero-trust .stat strong{ font-family:var(--font-mono); font-size:1.3rem; color:var(--teal); display:block; }
+.hero-trust .stat span{ font-size:0.82rem; color:#5C7068; }
+
+/* hero visual card -------------------------------------------------- */
+.hero-visual{ position:relative; }
+.hero-card{
+  background:var(--white); border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-pop); padding:36px; position:relative;
+  border:1px solid var(--line);
+}
+.hero-card .arc-label{ text-align:center; margin-top:-8px; }
+.hero-card .arc-label strong{ font-family:var(--font-display); font-size:2.4rem; color:var(--teal); }
+.hero-card .arc-label span{ display:block; font-size:0.85rem; color:#5C7068; font-family:var(--font-mono); }
+.hero-card .arc-caption{ text-align:center; margin-top:10px; font-size:0.92rem; color:#41584F; }
+.floating-chip{
+  position:absolute; background:var(--white); border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-card); padding:12px 16px; display:flex; align-items:center; gap:10px;
+  font-size:0.84rem; font-weight:600; border:1px solid var(--line);
+}
+.floating-chip.chip-1{ top:-18px; left:-26px; }
+.floating-chip.chip-2{ bottom:6px; right:-30px; }
+.floating-chip .dot{ width:9px; height:9px; border-radius:50%; background:#3FA66B; box-shadow:0 0 0 4px rgba(63,166,107,0.18); }
+@media (max-width: 600px){
+  .floating-chip{ display:none; } /* avoid clutter on small screens */
+}
+
+@media (max-width: 980px){
+  .hero-grid{ grid-template-columns:1fr; }
+  .hero-visual{ order:-1; max-width:420px; margin:0 auto 12px; }
+}
+
+/* =====================================================================
+   5. TRUST STRIP (stat counters)
+   ===================================================================== */
+.trust-strip{ background:var(--teal); color:var(--white); padding:44px 0; }
+.trust-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; text-align:center; }
+.trust-grid .num{ font-family:var(--font-mono); font-size:clamp(1.6rem,3vw,2.2rem); color:var(--white); }
+.trust-grid .num .plus{ color:var(--coral); }
+.trust-grid .label{ font-size:0.85rem; opacity:0.8; margin-top:4px; }
+@media (max-width:760px){ .trust-grid{ grid-template-columns:repeat(2,1fr); row-gap:32px; } }
+
+/* =====================================================================
+   6. SMILE-CURVE DIVIDER (signature device used between sections)
+   A gentle upward arc — literally the shape of a smile — replacing
+   plain straight-line section dividers throughout the page.
+   ===================================================================== */
+.smile-divider{ display:block; width:100%; height:60px; margin-top:-1px; }
+
+/* =====================================================================
+   7. SERVICES
+   ===================================================================== */
+.services-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.service-card{
+  background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:32px 28px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.service-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-card); border-color:transparent; }
+.service-icon{
+  width:54px; height:54px; border-radius:14px; background:var(--mint);
+  display:flex; align-items:center; justify-content:center; margin-bottom:20px;
+}
+.service-icon svg{ width:28px; height:28px; stroke:var(--teal); }
+.service-card h3{ font-size:1.18rem; margin-bottom:10px; color:var(--ink); }
+.service-card p{ font-size:0.94rem; color:#54685F; margin-bottom:18px; }
+.service-card .learn{ font-size:0.86rem; font-weight:600; color:var(--coral); display:inline-flex; align-items:center; gap:6px; }
+.service-card .learn svg{ width:14px; height:14px; transition:transform .2s ease; }
+.service-card:hover .learn svg{ transform:translateX(4px); }
+@media (max-width:980px){ .services-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:620px){ .services-grid{ grid-template-columns:1fr; } }
+
+/* =====================================================================
+   8. WHY CHOOSE US
+   ===================================================================== */
+.why-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:center; }
+.why-list{ display:flex; flex-direction:column; gap:26px; }
+.why-item{ display:flex; gap:18px; }
+.why-item .icon{
+  flex:none; width:44px; height:44px; border-radius:12px; background:var(--coral);
+  display:flex; align-items:center; justify-content:center;
+}
+.why-item .icon svg{ width:22px; height:22px; stroke:var(--white); }
+.why-item h4{ font-size:1.05rem; margin-bottom:6px; }
+.why-item p{ font-size:0.92rem; color:#54685F; }
+.why-visual{
+  background:var(--teal); border-radius:var(--radius-lg); padding:40px;
+  color:var(--white); position:relative; overflow:hidden;
+}
+.why-visual h3{ font-size:1.5rem; margin-bottom:14px; }
+.why-visual p{ opacity:0.85; font-size:0.95rem; margin-bottom:24px; }
+.why-visual .quote-mark{ font-family:var(--font-display); font-size:3.2rem; color:var(--coral); line-height:0.6; display:block; margin-bottom:8px; }
+@media (max-width:920px){ .why-grid{ grid-template-columns:1fr; } }
+
+/* =====================================================================
+   9. MEET THE DOCTORS
+   Avatars are abstract SVG "geometric portraits" (no stock photography
+   used anywhere in this demo) so the client can swap in real photos later.
+   ===================================================================== */
+.doctors-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+.doctor-card{ text-align:center; }
+.doctor-avatar{
+  width:100%; aspect-ratio:1/1; border-radius:var(--radius-lg); overflow:hidden;
+  margin-bottom:18px; box-shadow:var(--shadow-card);
+}
+.doctor-card h3{ font-size:1.1rem; margin-bottom:4px; }
+.doctor-card .role{ font-family:var(--font-mono); font-size:0.78rem; color:var(--coral); text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; display:block; }
+.doctor-card p{ font-size:0.9rem; color:#54685F; }
+@media (max-width:860px){ .doctors-grid{ grid-template-columns:1fr; max-width:360px; margin:0 auto; gap:40px; } }
+
+/* =====================================================================
+   10. TESTIMONIALS (carousel)
+   ===================================================================== */
+.testi-wrap{ position:relative; max-width:720px; margin:0 auto; }
+.testi-track{ overflow:hidden; border-radius:var(--radius-lg); }
+.testi-slides{ display:flex; transition:transform .5s ease; }
+.testi-slide{ flex:0 0 100%; background:var(--white); border:1px solid var(--line); border-radius:var(--radius-lg); padding:44px; text-align:center; }
+.testi-stars{ display:flex; justify-content:center; gap:4px; margin-bottom:18px; }
+.testi-stars svg{ width:18px; height:18px; fill:var(--gold); }
+.testi-slide p.quote{ font-family:var(--font-display); font-size:1.25rem; color:var(--ink); margin-bottom:22px; }
+.testi-person strong{ display:block; font-size:0.95rem; }
+.testi-person span{ font-size:0.82rem; color:#5C7068; }
+.testi-controls{ display:flex; justify-content:center; align-items:center; gap:18px; margin-top:24px; }
+.testi-arrow{ width:42px; height:42px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; background:var(--white); transition:.2s; }
+.testi-arrow:hover{ background:var(--teal); border-color:var(--teal); }
+.testi-arrow:hover svg{ stroke:var(--white); }
+.testi-arrow svg{ width:16px; height:16px; stroke:var(--teal); }
+.testi-dots{ display:flex; gap:8px; }
+.testi-dot{ width:8px; height:8px; border-radius:50%; background:var(--line); transition:.25s; }
+.testi-dot.is-active{ background:var(--coral); width:22px; border-radius:5px; }
+
+/* =====================================================================
+   11. FAQ ACCORDION
+   ===================================================================== */
+.faq-list{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
+.faq-item{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; }
+.faq-q{
+  width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px;
+  padding:22px 26px; text-align:left; font-weight:600; font-size:1rem; color:var(--ink);
+}
+.faq-q .plus{ flex:none; width:22px; height:22px; position:relative; }
+.faq-q .plus::before, .faq-q .plus::after{
+  content:""; position:absolute; background:var(--teal); top:50%; left:50%; transform:translate(-50%,-50%);
+}
+.faq-q .plus::before{ width:14px; height:2px; }
+.faq-q .plus::after{ width:2px; height:14px; transition:transform .25s ease; }
+.faq-item.is-open .faq-q .plus::after{ transform:translate(-50%,-50%) rotate(90deg) scaleY(0); }
+.faq-a{ max-height:0; overflow:hidden; transition:max-height .3s ease; }
+.faq-a-inner{ padding:0 26px 22px; font-size:0.94rem; color:#54685F; }
+.faq-item.is-open .faq-q{ color:var(--teal); }
+
+/* =====================================================================
+   12. APPOINTMENT / CONTACT
+   ===================================================================== */
+.appt-grid{ display:grid; grid-template-columns:0.95fr 1.05fr; gap:0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-pop); }
+.appt-info{ background:var(--teal); color:var(--white); padding:52px 44px; }
+.appt-info h3{ font-size:1.6rem; margin-bottom:14px; }
+.appt-info p{ opacity:0.85; font-size:0.95rem; margin-bottom:32px; }
+.appt-info .info-row{ display:flex; gap:14px; margin-bottom:22px; align-items:flex-start; }
+.appt-info .info-row svg{ width:20px; height:20px; stroke:var(--coral); flex:none; margin-top:2px; }
+.appt-info .info-row strong{ display:block; font-size:0.92rem; margin-bottom:2px; }
+.appt-info .info-row span{ font-size:0.86rem; opacity:0.8; font-family:var(--font-mono); }
+.appt-form{ background:var(--white); padding:52px 44px; }
+.form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field label{ font-size:0.82rem; font-weight:600; color:var(--ink); }
+.field input, .field select, .field textarea{
+  padding:13px 14px; border:1.5px solid var(--line); border-radius:var(--radius-sm);
+  background:var(--ivory); transition:border-color .2s ease;
+}
+.field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--teal); outline:none; }
+.field.full{ grid-column:1/-1; }
+.form-note{ font-size:0.78rem; color:#7C8C85; margin-top:14px; }
+.form-success{
+  display:none; align-items:center; gap:12px; background:var(--mint); color:var(--teal-dark);
+  padding:16px 18px; border-radius:var(--radius-sm); font-size:0.9rem; font-weight:600; margin-bottom:18px;
+}
+.form-success.is-visible{ display:flex; }
+.form-success svg{ width:20px; height:20px; stroke:var(--teal); flex:none; }
+.field-error{ font-size:0.76rem; color:var(--coral-dark); min-height:1em; }
+@media (max-width:920px){ .appt-grid{ grid-template-columns:1fr; } }
+@media (max-width:560px){ .form-row{ grid-template-columns:1fr; } }
+
+/* =====================================================================
+   13. FOOTER
+   ===================================================================== */
+.site-footer{ background:var(--ink); color:rgba(255,255,255,0.78); padding:64px 0 28px; }
+.footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:40px; margin-bottom:44px; }
+.footer-grid h4{ color:var(--white); font-size:0.95rem; margin-bottom:18px; font-family:var(--font-body); font-weight:600; }
+.footer-grid li{ margin-bottom:10px; font-size:0.88rem; }
+.footer-grid li a:hover{ color:var(--coral); }
+.footer-logo{ display:flex; align-items:center; gap:10px; color:var(--white); font-family:var(--font-display); font-size:1.2rem; font-weight:700; margin-bottom:14px; }
+.footer-logo svg{ width:30px; height:30px; }
+.footer-grid p.about{ font-size:0.88rem; line-height:1.7; max-width:280px; }
+.footer-social{ display:flex; gap:10px; margin-top:18px; }
+.footer-social a{ width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; transition:.2s; }
+.footer-social a:hover{ background:var(--coral); }
+.footer-social svg{ width:16px; height:16px; stroke:var(--white); }
+.footer-bottom{ border-top:1px solid rgba(255,255,255,0.12); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:0.8rem; }
+@media (max-width:880px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:560px){ .footer-grid{ grid-template-columns:1fr; } }
+
+/* =====================================================================
+   14. FLOATING ACTION BUTTONS (call / whatsapp / back-to-top)
+   ===================================================================== */
+.fab-stack{ position:fixed; right:22px; bottom:22px; z-index:90; display:flex; flex-direction:column; gap:12px; align-items:flex-end; }
+.fab{
+  width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  box-shadow:var(--shadow-pop); transition:transform .2s ease;
+}
+.fab:hover{ transform:scale(1.08); }
+.fab svg{ width:24px; height:24px; stroke:var(--white); }
+.fab-call{ background:var(--teal); }
+.fab-whatsapp{ background:#3FA66B; }
+.fab-top{
+  width:42px; height:42px; background:var(--white); border:1px solid var(--line);
+  opacity:0; visibility:hidden; transform:translateY(10px);
+  transition:opacity .25s ease, transform .25s ease, visibility .25s ease;
+}
+.fab-top.is-visible{ opacity:1; visibility:visible; transform:translateY(0); }
+.fab-top svg{ stroke:var(--teal); width:18px; height:18px; }
+
+/* mobile sticky booking bar (appears once hero is scrolled past) */
+.mobile-book-bar{
+  position:fixed; left:0; right:0; bottom:0; z-index:90; background:var(--white);
+  border-top:1px solid var(--line); padding:12px 16px; display:none;
+  justify-content:space-between; align-items:center; gap:12px; box-shadow:0 -8px 24px -10px rgba(0,0,0,0.12);
+  transform:translateY(100%); transition:transform .3s ease;
+}
+.mobile-book-bar.is-visible{ transform:translateY(0); }
+.mobile-book-bar .price-hint{ font-size:0.78rem; color:#5C7068; }
+.mobile-book-bar .price-hint strong{ display:block; color:var(--teal); font-family:var(--font-mono); font-size:0.95rem; }
+@media (max-width:760px){ .mobile-book-bar{ display:flex; } }
+
+/* =====================================================================
+   15. MISC / ANIMATIONS
+   ===================================================================== */
+@keyframes pulseRing{
+  0%{ box-shadow:0 0 0 0 rgba(255,107,74,0.45); }
+  100%{ box-shadow:0 0 0 14px rgba(255,107,74,0); }
+}
+.pulse{ animation:pulseRing 2.2s infinite; border-radius:50%; }
+
+</style>
+</head>
+<body>
+
+<!-- =======================================================================
+     HEADER
+======================================================================= -->
+<header class="site-header" id="siteHeader">
+  <div class="container nav-row">
+    <a href="#top" class="logo">
+      <!-- simple line-art tooth mark, doubles as favicon-style brand glyph -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2c-3.5 0-6 2.2-6 5.6 0 2 .6 3.6 1.1 5.4.5 1.9.9 4 1.6 6.2.3 1 .8 1.8 1.6 1.8s1.1-1 1.4-2.2c.3-1.4.5-3 1.3-3 .8 0 1 1.6 1.3 3 .3 1.2.6 2.2 1.4 2.2s1.3-.8 1.6-1.8c.7-2.2 1.1-4.3 1.6-6.2.5-1.8 1.1-3.4 1.1-5.4C18 4.2 15.5 2 12 2Z"/>
+      </svg>
+      Smileworks
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#services" class="is-active">Services</a>
+      <a href="#why-us">Why Us</a>
+      <a href="#doctors">Doctors</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#faq">FAQ</a>
+      <a href="#appointment">Contact</a>
+    </nav>
+
+    <div class="nav-cta">
+      <span class="nav-phone">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+        +91 98765 43210
+      </span>
+      <a href="#appointment" class="btn btn-primary">Book Appointment</a>
+      <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- mobile slide-down menu -->
+<div class="menu-backdrop" id="menuBackdrop"></div>
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+  <a href="#services">Services</a>
+  <a href="#why-us">Why Us</a>
+  <a href="#doctors">Doctors</a>
+  <a href="#testimonials">Reviews</a>
+  <a href="#faq">FAQ</a>
+  <a href="#appointment">Contact</a>
+  <span class="nav-phone">📞 +91 98765 43210</span>
+</nav>
+
+<!-- =======================================================================
+     HERO
+======================================================================= -->
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <p class="eyebrow">Hosur's Patient-First Dental Studio</p>
+      <h1>Healthy smiles, <em>without the dread</em> of a dental visit.</h1>
+      <p class="lede">Smileworks combines modern equipment, transparent pricing and a genuinely gentle approach — so the appointment you've been putting off finally feels easy.</p>
+
+      <div class="hero-actions">
+        <a href="#appointment" class="btn btn-primary">Book a Free Consultation</a>
+        <a href="#services" class="btn btn-outline">Explore Treatments</a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="stat"><strong>15+ yrs</strong><span>In practice</span></div>
+        <div class="stat"><strong>12,400+</strong><span>Smiles treated</span></div>
+        <div class="stat"><strong>4.9 / 5</strong><span>Patient rating</span></div>
+      </div>
+    </div>
+
+    <!-- SIGNATURE VISUAL: smile-shaped rating arc, not a stock photo -->
+    <div class="hero-visual reveal">
+      <div class="hero-card">
+        <span class="floating-chip chip-1"><span class="dot pulse"></span> Open Today, 9am–8pm</span>
+
+        <svg viewBox="0 0 220 130" width="100%">
+          <!-- background track arc -->
+          <path d="M20 110 A 90 90 0 0 1 200 110" fill="none" stroke="#EAF3EF" stroke-width="14" stroke-linecap="round"/>
+          <!-- progress arc representing 98% painless-treatment rating -->
+          <path d="M20 110 A 90 90 0 0 1 200 110" fill="none" stroke="#FF6B4A" stroke-width="14" stroke-linecap="round"
+                stroke-dasharray="251" stroke-dashoffset="6" id="arcProgress"/>
+        </svg>
+        <div class="arc-label">
+          <strong id="arcNumber">98%</strong>
+          <span>PAINLESS-TREATMENT RATING</span>
+        </div>
+        <p class="arc-caption">Based on 1,240 post-treatment patient surveys this year.</p>
+
+        <span class="floating-chip chip-2">⭐ 4.9 average review</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     TRUST STRIP — animated stat counters
+======================================================================= -->
+<section class="trust-strip">
+  <div class="container trust-grid">
+    <div>
+      <div class="num"><span class="counter" data-target="15">0</span><span class="plus">+</span></div>
+      <div class="label">Years of Practice</div>
+    </div>
+    <div>
+      <div class="num"><span class="counter" data-target="12400">0</span><span class="plus">+</span></div>
+      <div class="label">Patients Treated</div>
+    </div>
+    <div>
+      <div class="num"><span class="counter" data-target="6">0</span></div>
+      <div class="label">Specialist Dentists</div>
+    </div>
+    <div>
+      <div class="num"><span class="counter" data-target="98">0</span><span class="plus">%</span></div>
+      <div class="label">Painless Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- smile-curve divider -->
+<svg class="smile-divider" viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,0 C 480,80 960,80 1440,0 L1440,60 L0,60 Z" fill="#FBF8F3"/></svg>
+
+<!-- =======================================================================
+     SERVICES
+======================================================================= -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">What We Treat</p>
+      <h2>Dental care for every stage of your smile</h2>
+      <p>From routine check-ups to full smile makeovers, every treatment plan starts with an honest conversation — not an upsell.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <!-- Service card 1 -->
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3.5 0-6 2.2-6 5.6 0 2 .6 3.6 1.1 5.4.5 1.9.9 4 1.6 6.2.3 1 .8 1.8 1.6 1.8s1.1-1 1.4-2.2c.3-1.4.5-3 1.3-3 .8 0 1 1.6 1.3 3 .3 1.2.6 2.2 1.4 2.2s1.3-.8 1.6-1.8c.7-2.2 1.1-4.3 1.6-6.2.5-1.8 1.1-3.4 1.1-5.4C18 4.2 15.5 2 12 2Z"/></svg></div>
+        <h3>General Dentistry</h3>
+        <p>Check-ups, cleanings and fillings with digital X-rays for early, accurate diagnosis.</p>
+        <a href="#appointment" class="learn">Book this service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+      <!-- Service card 2 -->
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 5.5L20 9l-4.6 3.8L17 19l-5-3.2L7 19l1.6-6.2L4 9l5.6-1.5L12 2Z"/></svg></div>
+        <h3>Cosmetic Dentistry</h3>
+        <p>Teeth whitening, veneers and smile design tailored to your face and goals.</p>
+        <a href="#appointment" class="learn">Book this service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+      <!-- Service card 3 -->
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4v16M4 9h16"/></svg></div>
+        <h3>Braces &amp; Aligners</h3>
+        <p>Metal, ceramic and clear-aligner orthodontics for both teens and adults.</p>
+        <a href="#appointment" class="learn">Book this service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+      <!-- Service card 4 -->
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-9.5-9C1 8.5 2.5 4 7 4c2.2 0 3.6 1.3 5 3 1.4-1.7 2.8-3 5-3 4.5 0 6 4.5 4.5 8C19 16.6 12 21 12 21Z"/></svg></div>
+        <h3>Root Canal Therapy</h3>
+        <p>Microscope-guided, single-visit root canal treatment with minimal discomfort.</p>
+        <a href="#appointment" class="learn">Book this service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+      <!-- Service card 5 -->
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6m0 0a4 4 0 0 1 4 4v8H8v-8a4 4 0 0 1 4-4Z"/></svg></div>
+        <h3>Dental Implants</h3>
+        <p>Permanent, natural-looking replacements for missing teeth — single or full arch.</p>
+        <a href="#appointment" class="learn">Book this service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+      <!-- Service card 6 -->
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></div>
+        <h3>Pediatric Dentistry</h3>
+        <p>Friendly, low-anxiety dental visits designed specifically for children.</p>
+        <a href="#appointment" class="learn">Book this service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- smile-curve divider (flipped) -->
+<svg class="smile-divider" viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,60 C 480,-20 960,-20 1440,60 L1440,0 L0,0 Z" fill="#EAF3EF"/></svg>
+
+<!-- =======================================================================
+     WHY CHOOSE US
+======================================================================= -->
+<section class="section section--tint" id="why-us">
+  <div class="container why-grid">
+
+    <div class="why-list">
+      <p class="eyebrow reveal">Why Patients Choose Us</p>
+
+      <div class="why-item reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div>
+        <div>
+          <h4>Painless, sedation-friendly treatment</h4>
+          <p>Topical numbing and calm chairside manner — most patients say it's easier than they expected.</p>
+        </div>
+      </div>
+
+      <div class="why-item reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 4v6c0 5-4 9-9 10-5-1-9-5-9-10V6l9-4Z"/></svg></div>
+        <div>
+          <h4>Sterilisation you can see</h4>
+          <p>Single-use disposables and autoclave sterilisation for every single instrument, every patient.</p>
+        </div>
+      </div>
+
+      <div class="why-item reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>
+        <div>
+          <h4>Transparent, upfront pricing</h4>
+          <p>You get a written treatment plan and cost estimate before any work begins — no surprises.</p>
+        </div>
+      </div>
+
+      <div class="why-item reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 1 0-16 0M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg></div>
+        <div>
+          <h4>Insurance &amp; EMI support</h4>
+          <p>Cashless insurance claims and no-cost EMI options for implants, braces and surgery.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-visual reveal">
+      <span class="quote-mark">"</span>
+      <h3>We treat the person, not just the tooth.</h3>
+      <p>Every plan at Smileworks starts with listening — to your concerns, your budget and your timeline — before a single instrument comes out.</p>
+      <a href="#appointment" class="btn btn-ghost-light">Talk to a Dentist</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- =======================================================================
+     MEET THE DOCTORS
+     Avatars below are abstract SVG "geometric portraits" — placeholders
+     the agency/client can swap for real photography later.
+======================================================================= -->
+<section class="section" id="doctors">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Meet The Team</p>
+      <h2>Specialists who actually have time for your questions</h2>
+      <p>Six dentists, six specialities, one shared approach: explain first, treat second.</p>
+    </div>
+
+    <div class="doctors-grid">
+
+      <div class="doctor-card reveal">
+        <div class="doctor-avatar">
+          <svg viewBox="0 0 200 200" width="100%" height="100%">
+            <rect width="200" height="200" fill="#0E4D44"/>
+            <circle cx="100" cy="80" r="42" fill="#EAF3EF"/>
+            <path d="M30 200c0-50 31-78 70-78s70 28 70 78Z" fill="#EAF3EF"/>
+            <circle cx="148" cy="48" r="22" fill="#FF6B4A"/>
+          </svg>
+        </div>
+        <h3>Dr. Anika Rao</h3>
+        <span class="role">Cosmetic Dentistry</span>
+        <p>BDS, MDS — 14 years of practice in smile design and veneers.</p>
+      </div>
+
+      <div class="doctor-card reveal">
+        <div class="doctor-avatar">
+          <svg viewBox="0 0 200 200" width="100%" height="100%">
+            <rect width="200" height="200" fill="#FF6B4A"/>
+            <circle cx="100" cy="80" r="42" fill="#FBF8F3"/>
+            <path d="M30 200c0-50 31-78 70-78s70 28 70 78Z" fill="#FBF8F3"/>
+            <circle cx="50" cy="160" r="20" fill="#0E4D44"/>
+          </svg>
+        </div>
+        <h3>Dr. Vikram Sen</h3>
+        <span class="role">Orthodontics</span>
+        <p>BDS, MDS Ortho — braces &amp; clear-aligner specialist, 11 years.</p>
+      </div>
+
+      <div class="doctor-card reveal">
+        <div class="doctor-avatar">
+          <svg viewBox="0 0 200 200" width="100%" height="100%">
+            <rect width="200" height="200" fill="#E8A33D"/>
+            <circle cx="100" cy="80" r="42" fill="#16302B"/>
+            <path d="M30 200c0-50 31-78 70-78s70 28 70 78Z" fill="#16302B"/>
+            <circle cx="150" cy="150" r="18" fill="#FBF8F3"/>
+          </svg>
+        </div>
+        <h3>Dr. Meera Pillai</h3>
+        <span class="role">Pediatric Dentistry</span>
+        <p>BDS, Pedo — 9 years making first visits stress-free for kids.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- smile-curve divider -->
+<svg class="smile-divider" viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,0 C 480,80 960,80 1440,0 L1440,60 L0,60 Z" fill="#EAF3EF"/></svg>
+
+<!-- =======================================================================
+     TESTIMONIALS CAROUSEL
+======================================================================= -->
+<section class="section section--tint" id="testimonials">
+  <div class="container">
+    <div class="section-head reveal" style="margin-inline:auto; text-align:center;">
+      <p class="eyebrow" style="justify-content:center;">Patient Stories</p>
+      <h2>Don't take our word for it</h2>
+    </div>
+
+    <div class="testi-wrap reveal">
+      <div class="testi-track">
+        <div class="testi-slides" id="testiSlides">
+
+          <div class="testi-slide">
+            <div class="testi-stars">★★★★★</div>
+            <p class="quote">"I'd been avoiding the dentist for three years. Dr. Rao explained every step before doing it — genuinely the calmest dental visit I've had."</p>
+            <div class="testi-person"><strong>Priya Subramaniam</strong><span>Root Canal Patient</span></div>
+          </div>
+
+          <div class="testi-slide">
+            <div class="testi-stars">★★★★★</div>
+            <p class="quote">"My son actually asked when he could go back. The pediatric setup here is built for kids, not just smaller versions of the adult clinic."</p>
+            <div class="testi-person"><strong>Arjun Kumar</strong><span>Parent, Pediatric Patient</span></div>
+          </div>
+
+          <div class="testi-slide">
+            <div class="testi-stars">★★★★★</div>
+            <p class="quote">"Got a clear, written quote before my implant — no hidden costs at the end. That alone is rare for dental work in this city."</p>
+            <div class="testi-person"><strong>Lakshmi Narayanan</strong><span>Implant Patient</span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="testi-controls">
+        <button class="testi-arrow" id="testiPrev" aria-label="Previous testimonial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="testi-dots" id="testiDots"></div>
+        <button class="testi-arrow" id="testiNext" aria-label="Next testimonial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     FAQ
+======================================================================= -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-head reveal" style="margin-inline:auto; text-align:center;">
+      <p class="eyebrow" style="justify-content:center;">Good To Know</p>
+      <h2>Frequently asked questions</h2>
+    </div>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q">Do you accept health insurance? <span class="plus"></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes — we work with most major insurers for cashless claims on implants, surgery and orthodontics. Bring your policy details to your first visit and our front desk will verify coverage before treatment begins.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Is the first consultation free? <span class="plus"></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Your first consultation, including a digital X-ray and a written treatment plan, is complimentary. You only pay once you decide to go ahead with treatment.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">How painful is a root canal, really? <span class="plus"></span></button>
+        <div class="faq-a"><div class="faq-a-inner">With modern local anaesthesia and microscope-guided technique, most patients describe it as similar to getting a filling. We numb the area fully before starting and check in throughout.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">Do you treat children and how young? <span class="plus"></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes, from age 2 onward. Our pediatric room is designed to keep first visits short, friendly and low-pressure, with no judgment if a child needs a few extra minutes to settle in.</div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">What are your clinic hours? <span class="plus"></span></button>
+        <div class="faq-a"><div class="faq-a-inner">We're open Monday–Saturday, 9:00 AM – 8:00 PM, and Sunday 10:00 AM – 2:00 PM for emergencies only. Walk-ins are welcome but booking ahead avoids the wait.</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     APPOINTMENT / CONTACT
+======================================================================= -->
+<section class="section section--tint" id="appointment">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Book Your Visit</p>
+      <h2>Let's get your smile sorted</h2>
+      <p>Fill in the form and our front desk will confirm your slot by phone within a few hours.</p>
+    </div>
+
+    <div class="appt-grid reveal">
+
+      <div class="appt-info">
+        <h3>Smileworks Dental Care</h3>
+        <p>Modern dentistry in the heart of Hosur — easy parking, wheelchair access, and a calm waiting lounge.</p>
+
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><strong>Address</strong><span><!-- EDIT: replace with real clinic address -->12, MG Road, Hosur, Tamil Nadu 635109</span></div>
+        </div>
+
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          <div><strong>Phone</strong><span><!-- EDIT: replace with real clinic phone -->+91 98765 43210</span></div>
+        </div>
+
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <div><strong>Hours</strong><span>Mon–Sat 9am–8pm · Sun 10am–2pm</span></div>
+        </div>
+
+        <div class="info-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 4l8 8 8-8"/></svg>
+          <div><strong>Email</strong><span><!-- EDIT: replace with real clinic email -->hello@smileworksdental.in</span></div>
+        </div>
+      </div>
+
+      <!-- appointment form: client-side only in this demo.
+           In production, swap the JS submit handler for a real
+           backend / form service (see comments in the JS below). -->
+      <form class="appt-form" id="apptForm" novalidate>
+        <div class="form-success" id="formSuccess">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+          Thanks! We'll call you shortly to confirm your slot.
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="fName">Full name</label>
+            <input type="text" id="fName" name="fName" placeholder="e.g. Ramesh Kumar" required>
+            <span class="field-error" data-for="fName"></span>
+          </div>
+          <div class="field">
+            <label for="fPhone">Phone number</label>
+            <input type="tel" id="fPhone" name="fPhone" placeholder="10-digit mobile number" required>
+            <span class="field-error" data-for="fPhone"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="fService">Treatment needed</label>
+            <select id="fService" name="fService" required>
+              <option value="" disabled selected>Select a service</option>
+              <option>General Check-up</option>
+              <option>Cosmetic Dentistry</option>
+              <option>Braces / Aligners</option>
+              <option>Root Canal</option>
+              <option>Dental Implants</option>
+              <option>Child Dental Care</option>
+            </select>
+            <span class="field-error" data-for="fService"></span>
+          </div>
+          <div class="field">
+            <label for="fDate">Preferred date</label>
+            <input type="date" id="fDate" name="fDate" required>
+            <span class="field-error" data-for="fDate"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field full">
+            <label for="fNotes">Anything we should know? (optional)</label>
+            <textarea id="fNotes" name="fNotes" rows="3" placeholder="E.g. tooth pain on the lower-left side since Monday"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Request Appointment</button>
+        <p class="form-note">By submitting, you agree to be contacted by phone to confirm your appointment. This is a static demo — no data leaves your browser.</p>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================================
+     FOOTER
+======================================================================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+
+      <div>
+        <div class="footer-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2c-3.5 0-6 2.2-6 5.6 0 2 .6 3.6 1.1 5.4.5 1.9.9 4 1.6 6.2.3 1 .8 1.8 1.6 1.8s1.1-1 1.4-2.2c.3-1.4.5-3 1.3-3 .8 0 1 1.6 1.3 3 .3 1.2.6 2.2 1.4 2.2s1.3-.8 1.6-1.8c.7-2.2 1.1-4.3 1.6-6.2.5-1.8 1.1-3.4 1.1-5.4C18 4.2 15.5 2 12 2Z"/></svg>
+          Smileworks
+        </div>
+        <p class="about">A modern dental studio in Hosur focused on painless treatment, honest pricing and patients who actually look forward to their next visit.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z"/></svg></a>
+          <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a8 8 0 1 1-3.6-6.7L21 7l-1.3 3.6A8 8 0 0 1 21 15Z"/></svg></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#why-us">Why Us</a></li>
+          <li><a href="#doctors">Doctors</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Treatments</h4>
+        <ul>
+          <li><a href="#services">General Dentistry</a></li>
+          <li><a href="#services">Cosmetic Dentistry</a></li>
+          <li><a href="#services">Braces &amp; Aligners</a></li>
+          <li><a href="#services">Dental Implants</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get In Touch</h4>
+        <ul>
+          <li>12, MG Road, Hosur, TN 635109</li>
+          <li>+91 98765 43210</li>
+          <li>hello@smileworksdental.in</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Smileworks Dental Care. All rights reserved.</span>
+      <span>Demo website crafted for client presentation — not a real medical provider.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- =======================================================================
+     FLOATING ACTION BUTTONS
+======================================================================= -->
+<div class="fab-stack">
+  <button class="fab fab-top" id="fabTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+  <a class="fab fab-whatsapp" href="#" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a8 8 0 1 1-3.6-6.7L21 7l-1.3 3.6A8 8 0 0 1 21 15Z"/></svg>
+  </a>
+  <a class="fab fab-call" href="tel:+919876543210" aria-label="Call the clinic">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+  </a>
+</div>
+
+<!-- mobile sticky booking bar -->
+<div class="mobile-book-bar" id="mobileBookBar">
+  <span class="price-hint">Free first consult<strong>Limited slots today</strong></span>
+  <a href="#appointment" class="btn btn-primary">Book Now</a>
+</div>
+
+<!-- =======================================================================
+     JAVASCRIPT
+     All behaviour is vanilla JS, organised by feature, fully commented.
+======================================================================= -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ---------------------------------------------------------------
+     1. STICKY HEADER — adds shadow/shrink once page is scrolled,
+        and shows the mobile sticky booking bar after the hero.
+  --------------------------------------------------------------- */
+  var header = document.getElementById('siteHeader');
+  var mobileBar = document.getElementById('mobileBookBar');
+  var fabTop = document.getElementById('fabTop');
+  var heroHeight = document.querySelector('.hero').offsetHeight;
+
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    header.classList.toggle('is-scrolled', y > 40);
+    mobileBar.classList.toggle('is-visible', y > heroHeight * 0.6);
+    fabTop.classList.toggle('is-visible', y > 500);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  fabTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---------------------------------------------------------------
+     2. MOBILE MENU — slide-in nav for small screens.
+  --------------------------------------------------------------- */
+  var burger = document.getElementById('navBurger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var backdrop = document.getElementById('menuBackdrop');
+
+  function toggleMenu(open) {
+    mobileMenu.classList.toggle('is-open', open);
+    backdrop.classList.toggle('is-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  burger.addEventListener('click', function () {
+    toggleMenu(!mobileMenu.classList.contains('is-open'));
+  });
+  backdrop.addEventListener('click', function () { toggleMenu(false); });
+  mobileMenu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { toggleMenu(false); });
+  });
+
+  /* ---------------------------------------------------------------
+     3. SCROLL-REVEAL ANIMATIONS — fade/slide elements with class
+        "reveal" into view using IntersectionObserver (cheap & smooth).
+  --------------------------------------------------------------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  /* ---------------------------------------------------------------
+     4. ANIMATED STAT COUNTERS — counts up from 0 to data-target
+        once the trust strip scrolls into view.
+  --------------------------------------------------------------- */
+  var counters = document.querySelectorAll('.counter');
+  function animateCounter(el) {
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    var duration = 1400;
+    var startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var value = Math.floor(progress * target);
+      el.textContent = value.toLocaleString('en-IN');
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString('en-IN');
+    }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window) {
+    var counterObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function (el) { counterObserver.observe(el); });
+  }
+
+  /* ---------------------------------------------------------------
+     5. TESTIMONIAL CAROUSEL — manual arrows + dots + autoplay.
+  --------------------------------------------------------------- */
+  var slidesWrap = document.getElementById('testiSlides');
+  var slides = slidesWrap.children;
+  var dotsWrap = document.getElementById('testiDots');
+  var current = 0;
+  var autoplayId;
+
+  for (var i = 0; i < slides.length; i++) {
+    var dot = document.createElement('button');
+    dot.className = 'testi-dot' + (i === 0 ? ' is-active' : '');
+    dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+    dot.addEventListener('click', function (idx) {
+      return function () { goToSlide(idx); };
+    }(i));
+    dotsWrap.appendChild(dot);
+  }
+
+  function goToSlide(index) {
+    current = (index + slides.length) % slides.length;
+    slidesWrap.style.transform = 'translateX(-' + (current * 100) + '%)';
+    Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
+      d.classList.toggle('is-active', i === current);
+    });
+  }
+  function startAutoplay() {
+    autoplayId = setInterval(function () { goToSlide(current + 1); }, 6000);
+  }
+  function stopAutoplay() { clearInterval(autoplayId); }
+
+  document.getElementById('testiPrev').addEventListener('click', function () {
+    goToSlide(current - 1); stopAutoplay(); startAutoplay();
+  });
+  document.getElementById('testiNext').addEventListener('click', function () {
+    goToSlide(current + 1); stopAutoplay(); startAutoplay();
+  });
+  startAutoplay();
+
+  /* ---------------------------------------------------------------
+     6. FAQ ACCORDION — only one panel open at a time.
+  --------------------------------------------------------------- */
+  var faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(function (item) {
+    var question = item.querySelector('.faq-q');
+    var answer = item.querySelector('.faq-a');
+    question.addEventListener('click', function () {
+      var isOpen = item.classList.contains('is-open');
+      faqItems.forEach(function (other) {
+        other.classList.remove('is-open');
+        other.querySelector('.faq-a').style.maxHeight = null;
+      });
+      if (!isOpen) {
+        item.classList.add('is-open');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* ---------------------------------------------------------------
+     7. APPOINTMENT FORM — client-side validation + fake submission.
+        NOTE FOR DEVELOPER: this demo does not send data anywhere.
+        To go live, replace the fetch()-less block below with a real
+        POST request to your backend / form service (e.g. Formspree,
+        Google Sheets API, or your own server endpoint).
+  --------------------------------------------------------------- */
+  var form = document.getElementById('apptForm');
+  var successBox = document.getElementById('formSuccess');
+
+  function setError(name, message) {
+    var span = form.querySelector('.field-error[data-for="' + name + '"]');
+    if (span) span.textContent = message || '';
+  }
+
+  function validateForm() {
+    var valid = true;
+    var name = form.fName.value.trim();
+    var phone = form.fPhone.value.trim();
+    var service = form.fService.value;
+    var date = form.fDate.value;
+
+    setError('fName', ''); setError('fPhone', ''); setError('fService', ''); setError('fDate', '');
+
+    if (name.length < 2) { setError('fName', 'Please enter your full name.'); valid = false; }
+    if (!/^\d{10}$/.test(phone.replace(/\D/g, ''))) { setError('fPhone', 'Enter a valid 10-digit phone number.'); valid = false; }
+    if (!service) { setError('fService', 'Please choose a treatment.'); valid = false; }
+    if (!date) { setError('fDate', 'Please pick a preferred date.'); valid = false; }
+
+    return valid;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    /* --- DEMO ONLY: simulate a network request with no backend --- */
+    var submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    setTimeout(function () {
+      successBox.classList.add('is-visible');
+      form.reset();
+      submitBtn.textContent = 'Request Appointment';
+      submitBtn.disabled = false;
+      successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 900);
+  });
+
+  /* set minimum selectable date in the appointment form to "today" */
+  var dateInput = document.getElementById('fDate');
+  var today = new Date().toISOString().split('T')[0];
+  dateInput.setAttribute('min', today);
+
+  /* ---------------------------------------------------------------
+     8. ACTIVE NAV LINK HIGHLIGHT — underline the section in view.
+  --------------------------------------------------------------- */
+  var navLinks = document.querySelectorAll('.nav-links a');
+  var sections = document.querySelectorAll('section[id]');
+  if ('IntersectionObserver' in window) {
+    var navObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function (link) {
+            link.classList.toggle('is-active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function (s) { navObserver.observe(s); });
+  }
+
+  /* ---------------------------------------------------------------
+     9. FOOTER YEAR — always shows the current year automatically.
+  --------------------------------------------------------------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+});
+</script>
+</body>
+</html>
